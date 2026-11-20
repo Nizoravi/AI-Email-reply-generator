@@ -1,3 +1,22 @@
+def build_prompt(email, tone):
+    prompt = f"""
+You are an AI email assistant.
+
+Write a reply to the following email.
+
+Original email:
+{email}
+
+Instructions:
+- Use a {tone.lower()} tone.
+- Keep the reply relevant to the original email.
+- Make the response clear and natural.
+- Do not add unrelated information.
+- Return only the email reply.
+"""
+    return prompt.strip()
+
+
 def main():
     print("================================")
     print("       AI EMAIL REPLY GENERATOR")
@@ -28,8 +47,11 @@ def main():
         print("\nError: Invalid tone selection.")
         return
 
-    print("\nEmail received successfully!")
-    print("Selected tone:", tone)
+    prompt = build_prompt(email, tone)
+
+    print("\nPrompt created successfully!")
+    print("\nGenerated prompt:")
+    print(prompt)
 
 
 if __name__ == "__main__":
