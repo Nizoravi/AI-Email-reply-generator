@@ -1,3 +1,6 @@
+from ollama import generate_reply
+
+
 def build_prompt(email, tone):
     prompt = f"""
 You are an AI email assistant.
@@ -22,7 +25,6 @@ def main():
     print("       AI EMAIL REPLY GENERATOR")
     print("================================")
     print("Welcome! Your personal AI email assistant.")
-    print("Generate email replies with your preferred tone.")
 
     email = input("\nPaste the email you want to reply to:\n").strip()
 
@@ -49,9 +51,12 @@ def main():
 
     prompt = build_prompt(email, tone)
 
-    print("\nPrompt created successfully!")
-    print("\nGenerated prompt:")
-    print(prompt)
+    print("\nGenerating your email reply...")
+    reply = generate_reply(prompt)
+
+    print("\n========== GENERATED EMAIL REPLY ==========")
+    print(reply)
+    print("===========================================")
 
 
 if __name__ == "__main__":
