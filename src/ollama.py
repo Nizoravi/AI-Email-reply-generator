@@ -21,7 +21,31 @@ def generate_reply(prompt):
         method="POST"
     )
 
-    with urllib.request.urlopen(request, timeout=120) as response:
-        result = json.loads(response.read().decode("utf-8"))
+    try:
+        with urllib.request.urlopen(request, timeout=120) as response:
+            result = json.loads(response.read().decode("utf-8"))
 
-    return result["response"]
+        if "response" not in result:
+            raise RuntimeError("Unexpected response received from Ollama.")
+
+        return result["response"]
+
+    except urllib.error.HTTPError as error:
+        raise RuntimeError(
+            f"Ollama API error: HTTP {error.code}"
+        ) from error
+
+    except urllib.error.URLError as error:
+        raise RuntimeError(
+            "Cannot connect to Ollama. Make sure Ollama is running."
+        ) from error
+
+    except TimeoutError as error:
+        raise RuntimeError(
+            "The request timed out. Please try again."
+        ) from error
+
+    except (json.JSONDecodeError, UnicodeDecodeError) as error:
+        raise RuntimeError(
+            "Could not process the response from Ollama."
+        ) from error

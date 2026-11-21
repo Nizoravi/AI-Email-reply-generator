@@ -1,3 +1,4 @@
+
 from ollama import generate_reply
 
 
@@ -26,12 +27,14 @@ def main():
     print("================================")
     print("Welcome! Your personal AI email assistant.")
 
+    # Get the original email
     email = input("\nPaste the email you want to reply to:\n").strip()
 
     if not email:
         print("\nError: Email content cannot be empty.")
         return
 
+    # Select reply tone
     print("\nChoose your reply tone:")
     print("1. Professional")
     print("2. Friendly")
@@ -49,14 +52,25 @@ def main():
         print("\nError: Invalid tone selection.")
         return
 
+    # Construct the AI prompt
     prompt = build_prompt(email, tone)
 
+    # Generate the AI reply
     print("\nGenerating your email reply...")
-    reply = generate_reply(prompt)
 
-    print("\n========== GENERATED EMAIL REPLY ==========")
-    print(reply)
-    print("===========================================")
+    try:
+        reply = generate_reply(prompt)
+
+        if not reply.strip():
+            print("\nError: The AI returned an empty reply.")
+            return
+
+        print("\n========== GENERATED EMAIL REPLY ==========")
+        print(reply)
+        print("===========================================")
+
+    except RuntimeError as error:
+        print(f"\nError: {error}")
 
 
 if __name__ == "__main__":
